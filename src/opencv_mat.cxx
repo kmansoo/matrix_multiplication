@@ -3,7 +3,7 @@
 
 #include <opencv2/core.hpp>
 
-#include "time_util.h"
+#include "util.h"
 /*
 
   CV_32FC1 //real float
@@ -13,7 +13,6 @@
 
 */
 
-using namespace std;
 using namespace cv;
 
 void test_opencv_mat_mul(int size, bool is_float_type) {
@@ -35,11 +34,5 @@ void test_opencv_mat_mul(int size, bool is_float_type) {
 
   auto end_time = what_time_is_it_now();
 
-  //  cout << "a = \n" << format(a, Formatter::FMT_NUMPY) << ";" << endl <<
-  //  endl; cout << "b = \n" << format(b, Formatter::FMT_NUMPY) << ";" << endl
-  //  << endl; cout << "c = \n" << format(c, Formatter::FMT_NUMPY) << ";" <<
-  //  endl << endl;
-
-  cout << "test_opencv_mat_mul running time: " << end_time - start_time
-       << " seconds." << endl;
+  std::cout << "test_opencv_mat_mul running time: " << end_time - start_time << " seconds." << std::endl;
 }

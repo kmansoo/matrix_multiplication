@@ -51,24 +51,20 @@ if (NOT OPENMP_FOUND)
   message(FATAL_ERRORO "OpenMP not found. You need to build and install OpenMV before compiling it.")
 endif()
 
+##################
+# Source
+##################
+file(GLOB SRC_FILES 
+  src/*.cxx
+  src/*.cpp
+)
+
 #
 # Target Names
 #
-add_executable(mansoo_mat_mul src/mansoo_mat_mul.cxx)
-add_executable(opencv_mat_mul src/opencv_mat_mul.cxx)
+add_executable(test_mat_mul ${SRC_FILES})
 
-TARGET_LINK_LIBRARIES(mansoo_mat_mul
-  pthread
-)
-
-target_link_libraries(opencv_mat_mul
+target_link_libraries(test_mat_mul
     pthread
     ${OpenCV_LIBS}
 )
-
-#
-# Make Libraries and Targets
-#
-
-# ADD_SUBDIRECTORY(dependency/opencv)
-
