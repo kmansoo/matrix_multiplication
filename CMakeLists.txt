@@ -44,23 +44,33 @@ if (USE_OPENCV)
   endif()
 endif()
 
+###########
+# OpenMP
+###########
+find_package(OpenMP REQUIRED)
+
+if (NOT OPENMP_FOUND)
+  message(FATAL_ERRORO "OpenMP not found. You need to build and install OpenMV before compiling it.")
+endif()
+
 #
 # Target Names
 #
 add_executable(mansoo_mat_mul src/mansoo_mat_mul.cxx)
 add_executable(opencv_mat_mul src/opencv_mat_mul.cxx)
 
+target_compile_options(mansoo_mat_mul PRIVATE -Wall ${OpenMP_CXX_FLAGS})
+
 TARGET_LINK_LIBRARIES(mansoo_mat_mul
   pthread
-)
-
-TARGET_LINK_LIBRARIES(opencv_mat_mul
-  pthread
+  /usr/local/lib/libomp.dylib
 )
 
 target_link_libraries(opencv_mat_mul
-    ${OpenCV_LIBS} 
+    pthread
+    ${OpenCV_LIBS}
 )
+
 
 #
 # Make Libraries and Targets
