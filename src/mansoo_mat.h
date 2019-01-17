@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdlib.h>
+#include <time.h>
 #include <omp.h>
 
 template <typename T>
@@ -12,6 +14,10 @@ class MSMat {
 
     bool mul(MSMat<T> &a, MSMat<T> &b);
     bool mul_using_mp(MSMat<T> &a, MSMat<T> &b);
+
+    bool fill_zeros();
+    bool fill_ones();
+    bool fill_random_number();
 
     void print();
 
@@ -128,7 +134,7 @@ bool MSMat<T>::mul_using_mp(MSMat<T> &a, MSMat<T> &b) {
   T* mat_b = b.matrix_;
   T* mat_c = matrix_;
 
-  #pragma omp parallel shared(mat_a, mat_b, mat_c, size_, nthreads) private( idx_1, idx_2, idx_3, relative_mat_a, relative_mat_b, relative_mat_c)
+  #pragma omp parallel shared(mat_a, mat_b, mat_c, relative_mat_a, relative_mat_b, relative_mat_c, nthreads) private( idx_1, idx_2, idx_3, tid)
   {
     tid = omp_get_thread_num();
 
@@ -137,7 +143,7 @@ bool MSMat<T>::mul_using_mp(MSMat<T> &a, MSMat<T> &b) {
       //  printf("Starting matrix multiple example with %d threads\n", nthreads);
     }
 
-    #pragma omp for schedule(static, chunk)
+    #pragma omp for schedule(static)
     for (idx_1 = 0; idx_1 < size_; idx_1++) { 
       for (idx_2 = 0; idx_2 < size_; idx_2++) { 
         relative_mat_a = mat_a + idx_2 * size_ + idx_1;
@@ -158,6 +164,33 @@ bool MSMat<T>::mul_using_mp(MSMat<T> &a, MSMat<T> &b) {
 }
 
 template<typename T>
+bool MSMat<T>::fill_zeros() {
+  for (int index = 0; index < total_size_; index++) 
+    matrix_[index] = 0;
+
+  return true;
+}  
+
+template<typename T>
+bool MSMat<T>::fill_ones() {
+  for (int index = 0; index < total_size_; index++) 
+    matrix_[index] = 1;
+
+  return true;
+}  
+
+template<typename T>
+bool MSMat<T>::fill_random_number() {
+  srand(time(0));
+
+  for (int index = 0; index < total_size_; index++) 
+    matrix_[index] = rand() % 100;
+
+  return true;
+}  
+
+
+template<typename T>
 void MSMat<T>::print() {
   if (matrix_ == NULL)
     return;
@@ -166,12 +199,12 @@ void MSMat<T>::print() {
 
   for (auto row = 0; row < size_; ++row ) {
       for (auto col = 0; col < size_; ++col ) {
-          printf("%3.1f\t", *value_pos);
-          value_pos++;
+        std::cout << *value_pos << "\t";          
+        value_pos++;
       }
 
-      printf("\n");
+      std::cout << "\n";
   }
 
-  printf("\n");
+  std::cout << "\n";
 }

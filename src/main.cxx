@@ -38,6 +38,10 @@ void test_mansoo_matrix_mul(int size) {
     auto mat_b = MSMat<T>(size);
     auto mat_c = MSMat<T>(size);
 
+    mat_a.fill_ones();
+    mat_b.fill_ones();
+    mat_c.fill_zeros();
+
     auto start_time = what_time_is_it_now();
 
     mat_c.mul(mat_a, mat_b);
@@ -45,6 +49,10 @@ void test_mansoo_matrix_mul(int size) {
     auto end_time = what_time_is_it_now();
 
     std::cout << "test_mansoo_matrix_mul() running time: " << end_time - start_time << " seconds." << std::endl;
+
+    //  mat_a.print();
+    //  mat_b.print();
+    //  mat_c.print();
 }
 
 template <typename T>
@@ -53,6 +61,10 @@ void test_mansoo_matrix_mul_using_mp(int size) {
     auto mat_b = MSMat<T>(size);
     auto mat_c = MSMat<T>(size);
 
+    mat_a.fill_ones();
+    mat_b.fill_ones();
+    mat_c.fill_zeros();
+
     auto start_time = what_time_is_it_now();
 
     mat_c.mul_using_mp(mat_a, mat_b);
@@ -60,6 +72,10 @@ void test_mansoo_matrix_mul_using_mp(int size) {
     auto end_time = what_time_is_it_now();
 
     std::cout << "test_mansoo_matrix_mul_using_mp() running time: " << end_time - start_time << " seconds." << std::endl;
+
+    //  mat_a.print();
+    //  mat_b.print();
+    //  mat_c.print();
 }
 
  int main(int argc, char* argv[]) {
@@ -82,7 +98,7 @@ void test_mansoo_matrix_mul_using_mp(int size) {
     }
 
 
-    //  check_mansoo_matrix_mul();
+    check_mansoo_matrix_mul();
 
     std::cout << "---- OpenCV matrix multiplication  ---------" << std::endl;
     std::cout << " ==> The matrix size: " << mat_size << std::endl;
