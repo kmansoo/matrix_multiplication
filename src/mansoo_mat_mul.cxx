@@ -35,28 +35,41 @@ void mansoo_matrix_mul(float* mat_a, float* mat_b, float* mat_c, int size) {
   float* relative_mat_a;
   float** start_pos;
   float sum;
+  int tid, nthreads;
+  int chunk = 10;
 
-  #pragma omp parallel shared(mat_a, mat_b, mat_c, size, mat_b_index_table) private(idx_1, idx_2, idx_3, jj, kk, tid, tmp)
-  for (idx_1 = 0; idx_1 < size; idx_1++) {
-    #pragma omp for  schedule(static)
-    for (idx_2 = 0; idx_2 < size; idx_2++) {
-      relative_mat_a = mat_a + idx_1 * size;
-      start_pos = mat_b_index_table;
+  #pragma omp parallel shared(mat_a, mat_b, mat_c, size,  mat_b_index_table, nthreads) private(idx_1, idx_2, idx_3, sum, relative_mat_a, start_pos)
+  {
+    tid = omp_get_thread_num();
 
-      sum = 0.0f;
+    if (tid == 0) {
+      nthreads = omp_get_num_threads();
 
-      #pragma omp for  schedule(static)
-      for (idx_3 = 0; idx_3 < size; idx_3++) {
-        sum += *relative_mat_a * *(*start_pos + idx_2);
-
-        start_pos++;      //  <--- 비용이 많이 듦
-        relative_mat_a++; //  
-      }
-
-      *(relative_mat_c + idx_2) = sum;
+      printf("Starting matrix multiple example with %d threads\n", nthreads);
     }
 
-    relative_mat_c += size;
+    /*** Initialize matrices ***/
+    #pragma omp for schedule(static, chunk)
+
+    for (idx_1 = 0; idx_1 < size; idx_1++) {
+      for (idx_2 = 0; idx_2 < size; idx_2++) {
+        relative_mat_a = mat_a + idx_1 * size;
+        start_pos = mat_b_index_table;
+
+        sum = 0.0f;
+        
+        for (idx_3 = 0; idx_3 < size; idx_3++) {
+          sum += *relative_mat_a * *(*start_pos + idx_2);
+
+          start_pos++;      //  <--- 비용이 많이 듦
+          relative_mat_a++; //  
+        }
+
+        *(relative_mat_c + idx_2) = sum;
+      }
+
+      relative_mat_c += size;
+    }
   }
 
   auto end_time = what_time_is_it_now();
@@ -127,7 +140,6 @@ void test_mansoo_matrix_mul_size_n(int size) {
 
   mansoo_matrix_mul(mat_a, mat_b, mat_c, size);
 }
-
 
 int main(int argc, char* argv[]) {
 

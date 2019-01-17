@@ -11,16 +11,14 @@ PROJECT(matrix_multiplication_performance_test)
 #
 
 option(USE_OPENCV         "Use OpenCV"  ON)
-option(USE_RELEASE_MODE   "Use release mode for fast execution"  ON)
 
 #
 # Add Compiler Option and Macro
 #
 add_definitions(-std=c++11)
 
-if (USE_RELEASE_MODE)
-  set (CMAKE_CXX_FLAGS "-fPIC -Ofast")
-endif()
+# for OpenMP
+set (CMAKE_CXX_FLAGS "-fPIC -Ofast -fopenmp")
 
 # Set Build Directories
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -59,18 +57,14 @@ endif()
 add_executable(mansoo_mat_mul src/mansoo_mat_mul.cxx)
 add_executable(opencv_mat_mul src/opencv_mat_mul.cxx)
 
-target_compile_options(mansoo_mat_mul PRIVATE -Wall ${OpenMP_CXX_FLAGS})
-
 TARGET_LINK_LIBRARIES(mansoo_mat_mul
   pthread
-  /usr/local/lib/libomp.dylib
 )
 
 target_link_libraries(opencv_mat_mul
     pthread
     ${OpenCV_LIBS}
 )
-
 
 #
 # Make Libraries and Targets
