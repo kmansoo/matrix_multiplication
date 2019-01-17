@@ -4,13 +4,12 @@
 #include <opencv2/core.hpp>
 
 #include "util.h"
-/*
 
+/*
   CV_32FC1 //real float
   CV_32FC2 //complex float
   CV_64FC1 //real double
   CV_64FC2 //complex double
-
 */
 
 using namespace cv;

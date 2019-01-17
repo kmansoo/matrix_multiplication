@@ -175,9 +175,3 @@ void MSMat<T>::print() {
 
   printf("\n");
 }
-
-//  test_mansoo_matrix_mul_size_3();
-//  void test_mansoo_matrix_mul_size_n(int size);
-
-void test_mansoo_matrix_mul_size_3();
-void test_mansoo_matrix_mul_size_n(int size);
