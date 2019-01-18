@@ -11,6 +11,7 @@ PROJECT(matrix_multiplication_performance_test)
 #
 
 option(USE_OPENCV         "Use OpenCV"  ON)
+option(USE_OPENMP         "Use OpenMP"  ON)
 
 #
 # Add Compiler Option and Macro
@@ -18,7 +19,7 @@ option(USE_OPENCV         "Use OpenCV"  ON)
 add_definitions(-std=c++11)
 
 # for OpenMP
-set (CMAKE_CXX_FLAGS "-fPIC -Ofast -fopenmp")
+set (CMAKE_CXX_FLAGS "-fPIC -Ofast")
 
 # Set Build Directories
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -45,10 +46,15 @@ endif()
 ###########
 # OpenMP
 ###########
-find_package(OpenMP REQUIRED)
+if (USE_OPENMP)
+  find_package(OpenMP)
 
-if (NOT OPENMP_FOUND)
-  message(FATAL_ERRORO "OpenMP not found. You need to build and install OpenMV before compiling it.")
+  if (NOT OPENMP_FOUND)
+    message(STATUS "OpenMP not found. You might build and install OpenMV before compiling it if you want to use OpenMP.")
+  else()
+    add_definitions(-DUSE_OPENMP)
+    set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fopenmp")
+  endif()
 endif()
 
 ##################

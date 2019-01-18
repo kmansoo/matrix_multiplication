@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <stdlib.h>
 #include <time.h>
 #include <omp.h>
@@ -112,6 +113,12 @@ bool MSMat<T>::mul(MSMat<T> &a, MSMat<T> &b) {
 
 template<typename T>
 bool MSMat<T>::mul_using_mp(MSMat<T> &a, MSMat<T> &b) {
+
+#ifndef USE_OPENMP
+  std::cout << "MSMat<T>::mul_using_mp(), This system does not support the OpenMP. Please check it!" << std::endl;
+  return false;
+#endif
+
   if (a.size_ != b.size_ || a.size_ != this->size_) {
     std::cout << "Mat<T>::mul, Out of range of matrix." << std::endl;
     return false;
@@ -134,16 +141,22 @@ bool MSMat<T>::mul_using_mp(MSMat<T> &a, MSMat<T> &b) {
   T* mat_b = b.matrix_;
   T* mat_c = matrix_;
 
+#ifdef USE_OPENMP
   #pragma omp parallel shared(mat_a, mat_b, mat_c, relative_mat_a, relative_mat_b, relative_mat_c, nthreads) private( idx_1, idx_2, idx_3, tid)
+#endif
   {
+#ifdef USE_OPENMP
     tid = omp_get_thread_num();
 
     if (tid == 0) {
       nthreads = omp_get_num_threads();
       //  printf("Starting matrix multiple example with %d threads\n", nthreads);
     }
+#endif
 
+#ifdef USE_OPENMP
     #pragma omp for schedule(static)
+#endif
     for (idx_1 = 0; idx_1 < size_; idx_1++) { 
       for (idx_2 = 0; idx_2 < size_; idx_2++) { 
         relative_mat_a = mat_a + idx_2 * size_ + idx_1;
