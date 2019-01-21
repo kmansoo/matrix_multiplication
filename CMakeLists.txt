@@ -18,8 +18,10 @@ option(USE_OPENMP         "Use OpenMP"  ON)
 #
 add_definitions(-std=c++11)
 
-# for OpenMP
-set (CMAKE_CXX_FLAGS "-fPIC -Ofast")
+# for release mode
+SET(CMAKE_CXX_FLAGS "-fPIC -Ofast")
+ 
+# set (CMAKE_CXX_FLAGS "-fPIC -Ofast -fopenmp")
 
 # Set Build Directories
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -53,9 +55,10 @@ if (USE_OPENMP)
     message(STATUS "OpenMP not found. You might build and install OpenMV before compiling it if you want to use OpenMP.")
   else()
     add_definitions(-DUSE_OPENMP)
-    set (CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-fopenmp")
+    string(CONCAT CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} " -fopenmp")
   endif()
 endif()
+
 
 ##################
 # Source
