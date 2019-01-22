@@ -1,13 +1,24 @@
 # matrix_multiplication
 
-## How to build
+## How to build on Linux
 ```bash
-cd ~/Luna
+cd ~/matrix_multiplication
 mkdir build  
 cd build
 cmake ..
 make
 ```
+
+## How to build on macOS
+The macOS's clang does not support OpenMP. So you need to install g++ 8.x using homebrew.
+After installing g++ 8.x, you can build it with OpenMP.
+'''bash
+cd ~/matrix_multiplication
+mkdir build
+cd build
+cmake -DCMAKE_CXX_COMPILER=g++-8 ..
+make
+'''
 
 ## How to run
 ```bash
