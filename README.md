@@ -1,6 +1,24 @@
 # matrix_multiplication
+This matrix multiplication is using OpenMP. 
+You can compare a calculation speed of matrix multiplication between OpenCV and my code.
+My code implements two algorithms.
+First algorithm uses the for statement and memory cache.
+The other uses the for statement, memory cache and OpenMP.
+
+But there is one issue i've knew when it uses OpenMP. 
+I'll fix this issue as soon as possible.
+
+# How to build
+You can build this project with OpenMP.
+However this project can build and execute without OpenMP after modifying to set OFF for OpenMP option in CMakeFiles.txt.
 
 ## How to build on Linux
+First, You need check whether OpenMP is installed or not.
+if you didn't install OpenMP, you can install it like this:
+```bash
+sudo apt-get install libomp-dev
+```
+
 ```bash
 cd ~/matrix_multiplication
 mkdir build  
@@ -12,13 +30,13 @@ make
 ## How to build on macOS
 The macOS's clang does not support OpenMP. So you need to install g++ 8.x using homebrew.
 After installing g++ 8.x, you can build it with OpenMP.
-'''bash
+```bash
 cd ~/matrix_multiplication
 mkdir build
 cd build
 cmake -DCMAKE_CXX_COMPILER=g++-8 ..
 make
-'''
+```
 
 ## How to run
 ```bash
