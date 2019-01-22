@@ -1,4 +1,4 @@
-# matrix_multiplication
+# Matrix Multiplication
 This matrix multiplication is using OpenMP. 
 You can compare a calculation speed of matrix multiplication between OpenCV and my code.
 My code implements two algorithms.
