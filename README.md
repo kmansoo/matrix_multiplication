@@ -29,6 +29,11 @@ make
 
 ## How to build on macOS
 The macOS's clang does not support OpenMP. So you need to install g++ 8.x using homebrew.
+```
+sudo chown -R $(whoami) /usr/local/share/man/man3
+brew install gcc@8
+```
+
 After installing g++ 8.x, you can build it with OpenMP.
 ```bash
 cd ~/matrix_multiplication
